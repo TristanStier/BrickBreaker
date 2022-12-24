@@ -11,7 +11,7 @@ import javafx.animation.AnimationTimer;
 
 public class Test extends Application
 {
-    Circle mBall = new Circle(10, Color.RED);
+    Circle mBall = new Circle(40, Color.RED);
     Rectangle mRectangle = new Rectangle(50,100,Color.BLACK);
     boolean mWPressed = false;
     boolean mAPressed = false;
@@ -19,7 +19,7 @@ public class Test extends Application
     boolean mDPressed = false;
     int mPy = 250;
     int mPx = 250;
-    int speed = 10;
+    int speed = 2;
     long mLastTime = 0;
 
     @Override
@@ -72,14 +72,6 @@ public class Test extends Application
         window.setTitle("Moving Ball");
         window.setScene(scene);
         window.show();
-         /* 
-        Bounds bounds = canvas.getBoundsInLocal();
-       
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), 
-                new KeyValue(ball.layoutXProperty(), bounds.getMaxX()-ball.getRadius())));
-        timeline.setCycleCount(2);
-        timeline.play();
-        */
 
         AnimationTimer timer = new AnimationTimer() 
         {
@@ -88,14 +80,14 @@ public class Test extends Application
             {
                 double lDt = (now - mLastTime)/1000000000.0;
                 Test.this.moveBall(lDt);
-                checkBounds(mRectangle, mBall);
+                checkBounds(mBall, mRectangle);
                 mLastTime = now;
            }
         };
         timer.start();               
     }
     
-    protected boolean checkBounds(Shape s1, Shape s2)
+    protected boolean checkBounds(Circle s1, Shape s2)
     {
         if(s1.getBoundsInParent().intersects(s2.getBoundsInParent()))
         {

@@ -117,7 +117,8 @@ public class Test extends Application
         }
         mBall.relocate(mPx, mPy);
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) 
+    {
         launch();
     }
 }

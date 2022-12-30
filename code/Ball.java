@@ -3,8 +3,8 @@ import javafx.scene.shape.Circle;
 
 public class Ball 
 {
-//    private static double BALLRADIUS = 20;
-    Circle mBall;
+    //! MAKE SURE U MAKE THE CONSUTRUCTOR THING WHERE THEY DONT INPOUT ANYTHING OR WTVR
+    private Circle mBall;
     private double mRadius;
     private double mVx;
     private double mVy;

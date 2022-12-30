@@ -4,6 +4,7 @@ import javafx.scene.shape.*;
 
 public class Player
 {
+    //! MAKE SURE U MAKE THE CONSUTRUCTOR THING WHERE THEY DONT INPOUT ANYTHING OR WTVR
     private int PLAYERY;
     private Rectangle mPlayer = new Rectangle(150, 25, Color.BLACK);
     private boolean mAPressed = false;

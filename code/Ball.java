@@ -51,6 +51,12 @@ public class Ball
         return mPy;
     }
 
+    public void setPosition(double x, double y)
+    {
+        mPx = x;
+        mPy = y;
+    }
+
     public double getRadius()
     {
         return mRadius;

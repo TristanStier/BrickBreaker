@@ -10,7 +10,7 @@ public class Player
     private boolean mAPressed = false;
     private boolean mDPressed = false;
     private double mSpeed;
-    private double mX = 300;    
+    private double mX = 500;    
 
     public Player(int playerY, double speed)
     {
@@ -57,13 +57,13 @@ public class Player
         }
     }
  
-    public void movePlayer()
+    public void movePlayer(int w)
     {
-        if(mAPressed == true)
+        if(mAPressed == true && mX > 0)
         {
             mX -= mSpeed;
         }
-        if(mDPressed == true)
+        if(mDPressed == true && mX < w-150)
         {
             mX += mSpeed;
         }

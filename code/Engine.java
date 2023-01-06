@@ -7,7 +7,6 @@ public class Engine extends Application
     private Menu mMenu;
     private Game mGame;
     private Highscore mHighscore;
-    private int mHighscoreINT = 0;
 
     @Override
     public void start(Stage primaryStage) throws Exception 
@@ -38,12 +37,14 @@ public class Engine extends Application
 
     public void showHighscore()
     {
-        if(mGame.getPoints() >= mHighscoreINT)
-        {
-            mHighscoreINT = mGame.getPoints();
-        }
+        mHighscore.updateHighscore();
         mWindow.setScene(mHighscore.getScene());
         mWindow.setTitle("Highscore");
+    }
+
+    public Highscore getHighscore()
+    {
+        return mHighscore;
     }
 
     public static void main(String[] args) 

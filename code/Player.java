@@ -18,6 +18,11 @@ public class Player
         mSpeed = speed;
     }
 
+    public Player()
+    {
+        this(900, 25);
+    }
+
     public Rectangle getRectangle()
     {
         return mPlayer;

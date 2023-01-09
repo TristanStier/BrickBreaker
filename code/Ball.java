@@ -21,6 +21,11 @@ public class Ball
         mRadius = radius;
     }
 
+    public Ball()
+    {
+        this(10.0, 5.0, 500.0, 750.0, 20.0, Color.BLACK);
+    }
+
     public double getVelX()
     {
         return mVx;

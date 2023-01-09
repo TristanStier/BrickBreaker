@@ -16,6 +16,11 @@ public class Tile
         mTile.relocate(posX, posY);
     }
 
+    public Tile(int posX, int posY)
+    {
+        this(posX, posY, 100, 25, Color.BLACK);
+    }
+
     public int getPosX()
     {
         return mPosX;

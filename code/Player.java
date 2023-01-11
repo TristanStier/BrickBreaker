@@ -38,6 +38,11 @@ public class Player
         mX = posX;
     }
 
+    public void setSpeed(double speed)
+    {
+        mSpeed = speed;
+    }
+
     public void playerKeyPresssed(KeyEvent e)
     {
         if(e.getCode() == KeyCode.A)

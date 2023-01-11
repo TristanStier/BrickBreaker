@@ -1,3 +1,4 @@
+import java.io.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -49,6 +50,33 @@ public class Engine extends Application
 
     public static void main(String[] args) 
     {
+        File lFH = new File("highscore.txt");
+        if(!lFH.exists()) 
+        {
+            try (BufferedWriter lWriter = new BufferedWriter(new FileWriter("highscore.txt"))) 
+            {           
+                lWriter.write("0");
+                lWriter.close();
+            } 
+            catch (IOException e) 
+            {
+                e.printStackTrace();
+            }
+        }
+
+        File lFP = new File("points.txt");
+        if(!lFP.exists()) 
+        {
+            try (BufferedWriter lWriter = new BufferedWriter(new FileWriter("points.txt"))) 
+            {           
+                lWriter.write("0");
+                lWriter.close();
+            } 
+            catch (IOException e) 
+            {
+                e.printStackTrace();
+            }
+        }
         launch(args);
     }
 }

@@ -26,7 +26,7 @@ public class Game
     private Button mPauseButton;
     boolean mPaused = false;
 
-    private double mVelMultiplier = 1.2;
+    private double mVelMultiplier = 2;
     private double mBallVelX = 10;
     private double mBallVelY = 6;
 
@@ -45,7 +45,8 @@ public class Game
 
     public Game(Engine iEngine)
     {
-        createTiles();
+        //createTiles(1, 100, 25, 3, 5);
+        createTiles(1, 100, 25, 0);
         viewTiles();
 
         mLivesText = new Label("Lives: " + mLives);
@@ -62,7 +63,11 @@ public class Game
         mMenuButton.relocate(700, 50);
         mMenuButton.setMinWidth(120);
         mMenuButton.setMinHeight(50);
-        mMenuButton.setOnAction(e -> iEngine.showMenu());
+        mMenuButton.setOnAction(e -> 
+        {
+            iEngine.showMenu();
+            iEngine.getHighscore().updateHighscore();
+        });
 
         mPauseButton = new Button("Pause");
         mPauseButton.relocate(825, 50);
@@ -75,6 +80,7 @@ public class Game
                 mTimer.stop();
                 mPauseButton.setText("Unpause");
                 mPaused = true;
+                nextLevel(1);
             } 
             else
             {
@@ -129,7 +135,8 @@ public class Game
                 mTiles[row][column] = null;
             }
         }
-        createTiles();
+        //createTiles(1, 100, 25, 3 ,5);
+        createTiles(1, 100, 25, 0);
         mPlayer.setPosition(SCREENW/2);
         mBall.setPosition(SCREENW/2, 750);
         mBall.setVelX(mBallVelX*mVelMultiplier);
@@ -138,6 +145,7 @@ public class Game
         mPauseButton.setText("Pause");
         mPaused = false;
         mVelMultiplier = 1.2;
+        mPlayer.setSpeed(25);
         mLivesText.setText("Lives:" + mLives);
         mPoints = 0;
         mPointsText.setText("Points: " + mPoints);        
@@ -155,7 +163,9 @@ public class Game
                 mTiles[row][column] = null;
             }
         }
-        createTiles();
+        mPlayer.setSpeed(Math.random()*50+5);
+        //createTiles(Math.random()+0.3, Math.random()*600+20, 25, Math.random()*2+2, Math.random()*3+3);
+        createTiles(Math.random()+0.3, Math.random()*80+40, Math.random()*20+10, 70);
         mPlayer.setPosition(SCREENW/2);
         mBall.setPosition(SCREENW/2, 750);
         mBall.setVelX(mBallVelX*mVelMultiplier);
@@ -234,16 +244,22 @@ public class Game
         }
     }
 
-    public void createTiles()
+    public void createTiles(double Percentage, double sizeX, double sizeY, double yDeviationMultiplier)
     {
+        // mNumTilesH = (int)numTilesH;
+        // mNumTilesW = (int)numTilesW;
+        int lBuffer = 500;
         for(int row = 1; row<=mNumTilesW; row++)
         {
             for(int column = 1; column<=mNumTilesH; column++)
             {
-                int lBuffer = 500;
-                int lPosX = ((SCREENW-(SCREENW/mNumTilesW))/mNumTilesW)*row;
-                int lPosY = ((SCREENH-lBuffer)/mNumTilesH)*column;
-                mTiles[row][column] = new Tile(lPosX, lPosY, 100, 25, Color.BLACK);
+                // if(Math.random()<Percentage)
+                // {
+                    double lYDeviation = Math.random()*yDeviationMultiplier;
+                    int lPosX = ((SCREENW-(SCREENW/mNumTilesW))/mNumTilesW)*row;
+                    int lPosY = ((SCREENH-lBuffer)/mNumTilesH)*column;
+                    mTiles[row][column] = new Tile(lPosX, lPosY+(int)lYDeviation, (int)sizeX, (int)sizeY, Color.BLACK);
+                //}
             }
         }
     }
@@ -263,7 +279,7 @@ public class Game
         }
         if(lWin == true)
         {
-            nextLevel(1.25);
+            nextLevel(1.1);
         }
     }
 

@@ -1,7 +1,6 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -26,13 +25,15 @@ public class Game
     private Button mPauseButton;
     boolean mPaused = false;
 
-    private double mVelMultiplier = 2;
+    private double mVelMultiplier = 1.;
     private double mBallVelX = 10;
     private double mBallVelY = 6;
 
     private int mNumTilesW = 5;
-    private int mNumTilesH = 3;
+    private int mNumTilesH = 4;
     private Tile[][] mTiles = new Tile[mNumTilesW+1][mNumTilesH+1];
+    
+    private int mTileXM = 100;
 
     private Player mPlayer = new Player(900, 25);
     private Ball mBall = new Ball(mBallVelX*mVelMultiplier, mBallVelY*mVelMultiplier, SCREENW/2, 750, 20, Color.RED);
@@ -45,8 +46,7 @@ public class Game
 
     public Game(Engine iEngine)
     {
-        //createTiles(1, 100, 25, 3, 5);
-        createTiles(1, 100, 25, 0);
+        createTiles(Math.random()+0.3, mTileXM, Math.random()*20+10, 70);
         viewTiles();
 
         mLivesText = new Label("Lives: " + mLives);
@@ -95,6 +95,8 @@ public class Game
         mScene.setOnKeyPressed(e -> mPlayer.playerKeyPresssed(e));
         mScene.setOnKeyReleased(e -> mPlayer.playerKeyReleased(e));
 
+        nextLevel(1);
+        
         mTimer = new AnimationTimer() 
         {
             @Override
@@ -135,8 +137,7 @@ public class Game
                 mTiles[row][column] = null;
             }
         }
-        //createTiles(1, 100, 25, 3 ,5);
-        createTiles(1, 100, 25, 0);
+        createTiles(Math.random()+0.3, mTileXM, Math.random()*20+10, 70);
         mPlayer.setPosition(SCREENW/2);
         mBall.setPosition(SCREENW/2, 750);
         mBall.setVelX(mBallVelX*mVelMultiplier);
@@ -164,8 +165,7 @@ public class Game
             }
         }
         mPlayer.setSpeed(Math.random()*50+5);
-        //createTiles(Math.random()+0.3, Math.random()*600+20, 25, Math.random()*2+2, Math.random()*3+3);
-        createTiles(Math.random()+0.3, Math.random()*80+40, Math.random()*20+10, 70);
+        createTiles(Math.random()+0.3, mTileXM, Math.random()*20+10, 70);
         mPlayer.setPosition(SCREENW/2);
         mBall.setPosition(SCREENW/2, 750);
         mBall.setVelX(mBallVelX*mVelMultiplier);
@@ -244,22 +244,18 @@ public class Game
         }
     }
 
-    public void createTiles(double Percentage, double sizeX, double sizeY, double yDeviationMultiplier)
+    public void createTiles(double Percentage, double sizeXM, double sizeY, double yDM)
     {
-        // mNumTilesH = (int)numTilesH;
-        // mNumTilesW = (int)numTilesW;
         int lBuffer = 500;
         for(int row = 1; row<=mNumTilesW; row++)
         {
             for(int column = 1; column<=mNumTilesH; column++)
             {
-                // if(Math.random()<Percentage)
-                // {
-                    double lYDeviation = Math.random()*yDeviationMultiplier;
-                    int lPosX = ((SCREENW-(SCREENW/mNumTilesW))/mNumTilesW)*row;
-                    int lPosY = ((SCREENH-lBuffer)/mNumTilesH)*column;
-                    mTiles[row][column] = new Tile(lPosX, lPosY+(int)lYDeviation, (int)sizeX, (int)sizeY, Color.BLACK);
-                //}
+                double lYDeviation = Math.random()*yDM;
+                double lSizeXM = Math.random()*sizeXM+40;
+                int lPosX = ((SCREENW-(SCREENW/mNumTilesW))/mNumTilesW)*row;
+                int lPosY = ((SCREENH-lBuffer)/mNumTilesH)*column;
+                mTiles[row][column] = new Tile(lPosX, lPosY+(int)lYDeviation, (int)lSizeXM, (int)sizeY, Color.BLACK);
             }
         }
     }

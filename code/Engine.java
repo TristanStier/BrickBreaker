@@ -13,6 +13,8 @@ public class Engine extends Application
     public void start(Stage primaryStage) throws Exception 
     {
         mWindow = primaryStage;
+        mWindow.setX(400);
+        mWindow.setY(100);
         mMenu = new Menu(this);
         mGame = new Game(this);
         mHighscore = new Highscore(this);
@@ -25,6 +27,8 @@ public class Engine extends Application
     {
         mGame.stop();
         mGame.reset();
+        mWindow.setX(400);
+        mWindow.setY(100);
         mWindow.setScene(mMenu.getScene());
         mWindow.setTitle("Menu");
     }
@@ -33,12 +37,16 @@ public class Engine extends Application
     {
         mGame.start();
         mWindow.setScene(mGame.getScene());
+        mWindow.setX(100);
+        mWindow.setY(0);
         mWindow.setTitle("Game");
     }
 
     public void showHighscore()
     {
         mHighscore.updateHighscore();
+        mWindow.setX(400);
+        mWindow.setY(100);
         mWindow.setScene(mHighscore.getScene());
         mWindow.setTitle("Highscore");
     }
@@ -49,7 +57,7 @@ public class Engine extends Application
     }
 
     public static void main(String[] args) 
-    {
+    {   
         File lFH = new File("highscore.txt");
         if(!lFH.exists()) 
         {

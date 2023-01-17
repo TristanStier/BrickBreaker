@@ -96,6 +96,12 @@ public class Player
         mFixerR.relocate(mX-10, PLAYERY+3);
         mFixerL.relocate(mX+150, PLAYERY+3);
     }
+
+    public void resetKeyValues()
+    {
+        mAPressed = false;
+        mDPressed = false;
+    }
 }
 
 

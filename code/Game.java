@@ -33,10 +33,14 @@ public class Game
     private int mNumTilesW = 5;
     private int mNumTilesH = 4;
     private Tile[][] mTiles = new Tile[mNumTilesW+1][mNumTilesH+1];
+    private double mTileDifficulty = 1;
     
     private int mTileXM = 100;
 
-    private Player mPlayer = new Player(900, 15);
+    private Player mPlayer = new Player(900, 20);
+    private double mCurrentVel = 0;
+    private double mPastPos = mPlayer.getPosition();
+
     private Ball mBall = new Ball(mBallVelX*mVelMultiplier, mBallVelY*mVelMultiplier, SCREENW/2, 750, 20, Color.RED);
     private Rectangle mEndGame= new Rectangle(0, SCREENH, SCREENW, 10);
 
@@ -47,7 +51,7 @@ public class Game
     
     public Game(Engine iEngine)
     {
-        createTiles(Math.random()+0.3, mTileXM, Math.random()*20+10, 70);
+        createTiles(Math.random()+0.3, mTileXM, Math.random()*16+20, 70, 1);
         viewTiles();
 
         mLivesText = new Label("Lives: " + mLives);
@@ -81,7 +85,7 @@ public class Game
                 mTimer.stop();
                 mPauseButton.setText("Unpause");
                 mPaused = true;
-                nextLevel(1);
+                nextLevel(1, 1.003);
             } 
             else
             {
@@ -108,6 +112,9 @@ public class Game
                 wallCollision();
                 mPlayer.movePlayer(SCREENW);
                 mBall.updateBall();
+                
+                mCurrentVel = mPlayer.getPosition()-mPastPos;
+                mPastPos = mPlayer.getPosition();
             }
         };
     }
@@ -133,16 +140,18 @@ public class Game
         {
             for(int column = 1; column<=mNumTilesH; column++)
             {
-                mCanvas.getChildren().remove(mTiles[row][column].getRectangle());
+                mCanvas.getChildren().removeAll(mTiles[row][column].getRectangle(), mTiles[row][column].getFixerR(), mTiles[row][column].getFixerL(), mTiles[row][column].getHitsText());
                 mTiles[row][column] = null;
             }
         }
-        createTiles(Math.random()+0.3, mTileXM, Math.random()*20+10, 70);
+        createTiles(Math.random()+0.3, mTileXM, Math.random()*16+20, 70, 1);
         mPlayer.setPosition(SCREENW/2);
         mBall.setPosition(SCREENW/2, 750);
         mBall.setVelX(mBallVelX*mVelMultiplier);
         mBall.setVelY(-1*mBallVelY*mVelMultiplier);
+        mPlayer.resetKeyValues();
         mLives = 3;
+        mTileDifficulty = 1;
         mPauseButton.setText("Pause");
         mPaused = false;
         mVelMultiplier = 1.2;
@@ -153,18 +162,18 @@ public class Game
         viewTiles();
     }
 
-    public void nextLevel(double iVelMultiplier)
+    public void nextLevel(double iVelMultiplier, double iDifficultyMultiplier)
     {
         mVelMultiplier*=iVelMultiplier;
         for(int row = 1; row<=mNumTilesW; row++)
         {
             for(int column = 1; column<=mNumTilesH; column++)
             {
-                mCanvas.getChildren().remove(mTiles[row][column].getRectangle());
+                mCanvas.getChildren().removeAll(mTiles[row][column].getRectangle(), mTiles[row][column].getFixerR(), mTiles[row][column].getFixerL(), mTiles[row][column].getHitsText());
                 mTiles[row][column] = null;
             }
         }
-        createTiles(Math.random()+0.3, mTileXM, Math.random()*20+10, 70);
+        createTiles(Math.random()+0.3, mTileXM, Math.random()*16+20, 70, iDifficultyMultiplier);
         mPlayer.setPosition(SCREENW/2);
         mBall.setPosition(SCREENW/2, 750);
         mBall.setVelX(mBallVelX*mVelMultiplier);
@@ -178,7 +187,7 @@ public class Game
         {
             for(int column = 1; column<=mNumTilesH; column++)
             {
-                mCanvas.getChildren().addAll(mTiles[row][column].getRectangle(), mTiles[row][column].getFixerR(), mTiles[row][column].getFixerL());
+                mCanvas.getChildren().addAll(mTiles[row][column].getRectangle(), mTiles[row][column].getFixerR(), mTiles[row][column].getFixerL(), mTiles[row][column].getHitsText());
             }
         }
     }
@@ -188,6 +197,7 @@ public class Game
         if(mBall.getCircle().getBoundsInParent().intersects(mPlayer.getRectangle().getBoundsInParent()))
         {
             mBall.setVelY(mBall.getVelY()*-1);
+            mBall.setVelX((mBall.getVelX()+mCurrentVel)/2);
         }
         if(mBall.getCircle().getBoundsInParent().intersects(mPlayer.getFixerL().getBoundsInParent()) && mBall.getVelX()<0)
         {
@@ -251,7 +261,7 @@ public class Game
         }
     }
 
-    public void createTiles(double Percentage, double sizeXM, double sizeY, double yDM)
+    public void createTiles(double Percentage, double sizeXM, double sizeY, double yDM, double difficultyMultiplier)
     {
         int lBuffer = 500;
         for(int row = 1; row<=mNumTilesW; row++)
@@ -262,7 +272,24 @@ public class Game
                 double lSizeXM = Math.random()*sizeXM+40;
                 int lPosX = ((SCREENW-(SCREENW/mNumTilesW))/mNumTilesW)*row;
                 int lPosY = ((SCREENH-lBuffer)/mNumTilesH)*column;
-                mTiles[row][column] = new Tile(lPosX, lPosY+(int)lYDeviation, (int)lSizeXM, (int)sizeY, Color.BLACK);
+                mTileDifficulty *= difficultyMultiplier;
+                double randomValue = Math.random()*mTileDifficulty;
+                if(randomValue>1.5)
+                {
+                    mTiles[row][column] = new Tile(lPosX, lPosY+(int)lYDeviation, (int)lSizeXM, (int)sizeY, Color.BLACK, 8);                    
+                }
+                else if(randomValue>0.95)
+                {
+                    mTiles[row][column] = new Tile(lPosX, lPosY+(int)lYDeviation, (int)lSizeXM, (int)sizeY, Color.BLUE, 3);
+                }
+                else if(randomValue>0.65)
+                {
+                    mTiles[row][column] = new Tile(lPosX, lPosY+(int)lYDeviation, (int)lSizeXM, (int)sizeY, Color.RED, 2);
+                }
+                else
+                {
+                    mTiles[row][column] = new Tile(lPosX, lPosY+(int)lYDeviation, (int)lSizeXM, (int)sizeY, Color.GREEN, 1);
+                }
             }
         }
     }
@@ -282,7 +309,7 @@ public class Game
         }
         if(lWin == true)
         {
-            nextLevel(1.1);
+            nextLevel(1.1, 1.003);
         }
     }
 
@@ -295,20 +322,36 @@ public class Game
                 if(mTiles[row][column].getAlive() == true && mBall.getCircle().getBoundsInParent().intersects(mTiles[row][column].getRectangle().getBoundsInParent()))
                 {
                     mBall.setVelY(mBall.getVelY()*-1);
-                    mCanvas.getChildren().removeAll(mTiles[row][column].getRectangle(), mTiles[row][column].getFixerR(), mTiles[row][column].getFixerL());
-                    mTiles[row][column].setAlive(false);
-                    mPoints+=5;
-                    mPointsText.setText("Points: " + mPoints);   
-                    checkWin();     
+                    if(mTiles[row][column].getHits()<=1)
+                    {
+                        mCanvas.getChildren().removeAll(mTiles[row][column].getRectangle(), mTiles[row][column].getFixerR(), mTiles[row][column].getFixerL(), mTiles[row][column].getHitsText());
+                        mTiles[row][column].setAlive(false);
+                        mPoints+=5;
+                        mPointsText.setText("Points: " + mPoints);   
+                        checkWin();  
+                    }
+                    else
+                    {
+                        mTiles[row][column].setHits(mTiles[row][column].getHits()-1);
+                        mTiles[row][column].getHitsText().setText("" + mTiles[row][column].getHits());
+                    }
                 }
                 if(mTiles[row][column].getAlive() == true && (mBall.getCircle().getBoundsInParent().intersects(mTiles[row][column].getFixerL().getBoundsInParent()) || mBall.getCircle().getBoundsInParent().intersects(mTiles[row][column].getFixerR().getBoundsInParent())))
                 {
                     mBall.setVelX(mBall.getVelX()*-1);
-                    mCanvas.getChildren().removeAll(mTiles[row][column].getRectangle(), mTiles[row][column].getFixerR(), mTiles[row][column].getFixerL());
-                    mTiles[row][column].setAlive(false);
-                    mPoints+=5;
-                    mPointsText.setText("Points: " + mPoints);   
-                    checkWin();
+                    if(mTiles[row][column].getHits()<=1)
+                    {
+                        mCanvas.getChildren().removeAll(mTiles[row][column].getRectangle(), mTiles[row][column].getFixerR(), mTiles[row][column].getFixerL(), mTiles[row][column].getHitsText());
+                        mTiles[row][column].setAlive(false);
+                        mPoints+=5;
+                        mPointsText.setText("Points: " + mPoints);   
+                        checkWin();  
+                    }
+                    else
+                    {
+                        mTiles[row][column].setHits(mTiles[row][column].getHits()-1);
+                        mTiles[row][column].getHitsText().setText("" + mTiles[row][column].getHits());
+                    }
                 }
             }
         }

@@ -6,7 +6,8 @@ public class Player
 {
     //! MAKE SURE U MAKE THE CONSUTRUCTOR THING WHERE THEY DONT INPOUT ANYTHING OR WTVR
     private int PLAYERY;
-    private Rectangle mPlayer = new Rectangle(150, 25, Color.BLACK);
+    private Rectangle mPlayer = new Rectangle(150, 10, Color.BLACK);
+    private Rectangle mFixerL, mFixerR;
     private boolean mAPressed = false;
     private boolean mDPressed = false;
     private double mSpeed;
@@ -16,6 +17,10 @@ public class Player
     {
         PLAYERY = playerY;
         mSpeed = speed;
+        mFixerL = new Rectangle(10, 11, Color.RED);
+        mFixerR = new Rectangle(10, 11, Color.RED);
+        mFixerL.setVisible(false);
+        mFixerR.setVisible(false);
     }
 
     public Player()
@@ -28,6 +33,16 @@ public class Player
         return mPlayer;
     }
 
+    public Rectangle getFixerR()
+    {
+        return mFixerR;
+    }
+    
+    public Rectangle getFixerL()
+    {
+        return mFixerL;      
+    }
+    
     public double getPosition()
     {
         return mX;
@@ -78,5 +93,16 @@ public class Player
             mX += mSpeed;
         }
         mPlayer.relocate(mX, PLAYERY);
+        mFixerR.relocate(mX-10, PLAYERY+3);
+        mFixerL.relocate(mX+150, PLAYERY+3);
     }
 }
+
+
+
+
+
+
+
+
+

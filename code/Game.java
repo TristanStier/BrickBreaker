@@ -1,4 +1,5 @@
 import java.io.BufferedWriter;
+import javafx.scene.media.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import javafx.animation.AnimationTimer;
@@ -14,7 +15,7 @@ public class Game
 {
     private static int SCREENW = 1000;
     private static int SCREENH = 1000;
-    
+        
     private int mLives = 3;
     private Label mLivesText;
 
@@ -25,7 +26,7 @@ public class Game
     private Button mPauseButton;
     boolean mPaused = false;
 
-    private double mVelMultiplier = 1.;
+    private double mVelMultiplier = 1.5;
     private double mBallVelX = 10;
     private double mBallVelY = 6;
 
@@ -35,7 +36,7 @@ public class Game
     
     private int mTileXM = 100;
 
-    private Player mPlayer = new Player(900, 25);
+    private Player mPlayer = new Player(900, 15);
     private Ball mBall = new Ball(mBallVelX*mVelMultiplier, mBallVelY*mVelMultiplier, SCREENW/2, 750, 20, Color.RED);
     private Rectangle mEndGame= new Rectangle(0, SCREENH, SCREENW, 10);
 
@@ -43,7 +44,7 @@ public class Game
     private Scene mScene = new Scene(mCanvas, SCREENW, SCREENH);
 
     private AnimationTimer mTimer;
-
+    
     public Game(Engine iEngine)
     {
         createTiles(Math.random()+0.3, mTileXM, Math.random()*20+10, 70);
@@ -90,12 +91,11 @@ public class Game
             }
         });
 
-        mCanvas.getChildren().addAll(mBall.getCircle(), mPlayer.getRectangle(), mEndGame, mLivesText, mPointsText, mMenuButton, mPauseButton);
+        mCanvas.getChildren().addAll(mBall.getCircle(), mPlayer.getRectangle(), mPlayer.getFixerL(), mPlayer.getFixerR(), mEndGame, mLivesText, mPointsText, mMenuButton, mPauseButton);
 
         mScene.setOnKeyPressed(e -> mPlayer.playerKeyPresssed(e));
         mScene.setOnKeyReleased(e -> mPlayer.playerKeyReleased(e));
-
-        nextLevel(1);
+        
         
         mTimer = new AnimationTimer() 
         {
@@ -121,7 +121,7 @@ public class Game
     {
         mTimer.stop();
     }
-
+    
     public int getPoints()
     {
         return mPoints;
@@ -164,7 +164,6 @@ public class Game
                 mTiles[row][column] = null;
             }
         }
-        mPlayer.setSpeed(Math.random()*50+5);
         createTiles(Math.random()+0.3, mTileXM, Math.random()*20+10, 70);
         mPlayer.setPosition(SCREENW/2);
         mBall.setPosition(SCREENW/2, 750);
@@ -179,7 +178,7 @@ public class Game
         {
             for(int column = 1; column<=mNumTilesH; column++)
             {
-                mCanvas.getChildren().add(mTiles[row][column].getRectangle());
+                mCanvas.getChildren().addAll(mTiles[row][column].getRectangle(), mTiles[row][column].getFixerR(), mTiles[row][column].getFixerL());
             }
         }
     }
@@ -189,6 +188,14 @@ public class Game
         if(mBall.getCircle().getBoundsInParent().intersects(mPlayer.getRectangle().getBoundsInParent()))
         {
             mBall.setVelY(mBall.getVelY()*-1);
+        }
+        if(mBall.getCircle().getBoundsInParent().intersects(mPlayer.getFixerL().getBoundsInParent()) && mBall.getVelX()<0)
+        {
+            mBall.setVelX(mBall.getVelX()*-1);
+        }
+        if(mBall.getCircle().getBoundsInParent().intersects(mPlayer.getFixerR().getBoundsInParent()) && mBall.getVelX()>0)
+        {
+            mBall.setVelX(mBall.getVelX()*-1);
         }
     }
 
@@ -288,11 +295,20 @@ public class Game
                 if(mTiles[row][column].getAlive() == true && mBall.getCircle().getBoundsInParent().intersects(mTiles[row][column].getRectangle().getBoundsInParent()))
                 {
                     mBall.setVelY(mBall.getVelY()*-1);
-                    mCanvas.getChildren().remove(mTiles[row][column].getRectangle());
+                    mCanvas.getChildren().removeAll(mTiles[row][column].getRectangle(), mTiles[row][column].getFixerR(), mTiles[row][column].getFixerL());
                     mTiles[row][column].setAlive(false);
                     mPoints+=5;
                     mPointsText.setText("Points: " + mPoints);   
                     checkWin();     
+                }
+                if(mTiles[row][column].getAlive() == true && (mBall.getCircle().getBoundsInParent().intersects(mTiles[row][column].getFixerL().getBoundsInParent()) || mBall.getCircle().getBoundsInParent().intersects(mTiles[row][column].getFixerR().getBoundsInParent())))
+                {
+                    mBall.setVelX(mBall.getVelX()*-1);
+                    mCanvas.getChildren().removeAll(mTiles[row][column].getRectangle(), mTiles[row][column].getFixerR(), mTiles[row][column].getFixerL());
+                    mTiles[row][column].setAlive(false);
+                    mPoints+=5;
+                    mPointsText.setText("Points: " + mPoints);   
+                    checkWin();
                 }
             }
         }

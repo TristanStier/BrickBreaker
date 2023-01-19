@@ -37,62 +37,74 @@ public class Tile
     {
         this(posX, posY, 100, 25, Color.BLACK, 1);
     }
-
-    public int getPosX()
-    {
-        return mX;
-    }
-
-    public void setPosX(int posX)
-    {
-        mX = posX;
-    }
-
-    public int getPosY()
-    {
-        return mY;
-    }
-
-    public void setPosY(int posY)
-    {
-        mY = posY;
-    }
-
+    
+    /**
+     * Get alive boolean of the tile
+     * @return Returns alive boolean
+     */
     public boolean getAlive()
     {
         return mAlive;
     }
 
-    public void setAlive(boolean alive)
+    /**
+     * Sets the alive boolean of the tile
+     * @param iAlive Boolean to set
+     */
+    public void setAlive(boolean iAlive)
     {
-        mAlive = alive;
+        mAlive = iAlive;
     }
     
+    /**
+     * Gets the rectangle shape of tile
+     * @return Returns the rectangle shape
+     */
     public Rectangle getRectangle()
     {
         return mTile;
     }
     
+    /**
+     * Gets the shape of right fixer
+     * @return Returns shape of right fixer
+     */
     public Rectangle getFixerR()
     {
         return mFixerR;
     }
     
+    /**
+     * Gets the shape of left fixer
+     * @return Returns left fixer
+     */
     public Rectangle getFixerL()
     {
         return mFixerL;      
     }
 
+    /**
+     * Get hits text
+     * @return Returns hits text
+     */
     public Text getHitsText()
     {
         return mHitsText;
     }
 
-    public void setHits(int hits)
+    /**
+     * Sets the hits integer
+     * @param iHits 
+     */
+    public void setHits(int iHits)
     {
-        mHits = hits;
+        mHits = iHits;
     }
 
+    /**
+     * Gets the hits integer
+     * @return Returns hits integer
+     */
     public int getHits()
     {
         return mHits;

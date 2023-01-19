@@ -2,6 +2,10 @@ import java.io.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * @author tstie1
+ */
 public class Engine extends Application
 {
     private Stage mWindow;
@@ -23,6 +27,9 @@ public class Engine extends Application
         mWindow.show();
     }
 
+    /**
+     * Sets the scene of the current window to the menu scene
+     */
     public void showMenu()
     {
         mGame.stop();
@@ -33,6 +40,9 @@ public class Engine extends Application
         mWindow.setTitle("Menu");
     }
 
+    /**
+     * Sets the scene of the current window to the game scene
+     */
     public void showGame()
     {
         mGame.start();
@@ -42,6 +52,9 @@ public class Engine extends Application
         mWindow.setTitle("Game");
     }
 
+    /**
+     * Sets the scene of the current window to the high score scene
+     */
     public void showHighscore()
     {
         mHighscore.updateHighscore();
@@ -51,6 +64,10 @@ public class Engine extends Application
         mWindow.setTitle("Highscore");
     }
 
+    /**
+     * Gets the high score class
+     * @return Returns high score class
+     */
     public Highscore getHighscore()
     {
         return mHighscore;
@@ -58,6 +75,7 @@ public class Engine extends Application
 
     public static void main(String[] args) 
     {   
+        // Check for text files
         File lFH = new File("highscore.txt");
         if(!lFH.exists()) 
         {
@@ -85,6 +103,7 @@ public class Engine extends Application
                 e.printStackTrace();
             }
         }
+        
         launch(args);
     }
 }

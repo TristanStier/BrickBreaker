@@ -28,36 +28,64 @@ public class Player
         this(900, 25);
     }
 
+    /**
+     * Get player rectangle
+     * @return Return player rectangle
+     */
     public Rectangle getRectangle()
     {
         return mPlayer;
     }
 
+    /**
+     * Get right fixer
+     * @return Returns right fixer
+     */
     public Rectangle getFixerR()
     {
         return mFixerR;
     }
     
+    /**
+     * Get left fixer
+     * @return Returns left fixer
+     */
     public Rectangle getFixerL()
     {
         return mFixerL;      
     }
     
+    /**
+     * Get position X
+     * @return Returns position X
+     */
     public double getPosition()
     {
         return mX;
     }
 
-    public void setPosition(double posX)
+    /**
+     * Set the x position of player
+     * @param posX X position to set
+     */
+    public void setPosition(double iPosX)
     {
-        mX = posX;
+        mX = iPosX;
     }
 
-    public void setSpeed(double speed)
+    /**
+     * Set the speed of player
+     * @param speed Speed to set
+     */
+    public void setSpeed(double iSpeed)
     {
-        mSpeed = speed;
+        mSpeed = iSpeed;
     }
 
+    /**
+     * Handles player movement when key pressed
+     * @param e Key event to check
+     */
     public void playerKeyPresssed(KeyEvent e)
     {
         if(e.getCode() == KeyCode.A)
@@ -70,6 +98,10 @@ public class Player
         }
     }
 
+    /**
+     * Handles player movement when key released
+     * @param e Key event to check
+     */
     public void playerKeyReleased(KeyEvent e)
     {
         if(e.getCode() == KeyCode.A)
@@ -82,13 +114,17 @@ public class Player
         }
     }
  
-    public void movePlayer(int w)
+    /**
+     * Moves the player
+     * @param iScreenW Screen width
+     */
+    public void movePlayer(int iScreenW)
     {
         if(mAPressed == true && mX > 0)
         {
             mX -= mSpeed;
         }
-        if(mDPressed == true && mX < w-150)
+        if(mDPressed == true && mX < iScreenW-150)
         {
             mX += mSpeed;
         }
@@ -97,18 +133,12 @@ public class Player
         mFixerL.relocate(mX+150, PLAYERY+3);
     }
 
+    /**
+     * Resets player key values
+     */
     public void resetKeyValues()
     {
         mAPressed = false;
         mDPressed = false;
     }
 }
-
-
-
-
-
-
-
-
-

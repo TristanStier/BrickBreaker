@@ -32,6 +32,9 @@ public class Highscore
         mScene = new Scene(lLayout, 500, 500);
     }
 
+    /**
+     * Reads and write text files to update high score
+     */
     public void updateHighscore()
     {
         String currentHighscore = "";
@@ -75,6 +78,10 @@ public class Highscore
         }
     }
 
+    /**
+     * Get high score scene
+     * @return Returns high score scene
+     */
     public Scene getScene()
     {
         return mScene;

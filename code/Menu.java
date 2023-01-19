@@ -32,6 +32,10 @@ public class Menu
         mScene = new Scene(lLayout, 500, 500);
     }
 
+    /**
+     * Get the menu scene
+     * @return Returns menu scene
+     */
     Scene getScene()
     {
         return mScene;
